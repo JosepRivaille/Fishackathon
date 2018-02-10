@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
 import combine from './src';
-import schema from './src/laws/schema';
+import schema from './src/zones/schema';
 
 const app = express();
 var mongoURL = "mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00-00-qtem3.mongodb.net:27017,thefisherpalace-shard-00-01-qtem3.mongodb.net:27017,thefisherpalace-shard-00-02-qtem3.mongodb.net:27017/test?ssl=true&replicaSet=TheFisherPalace-shard-0&authSource=admin";
