@@ -41,7 +41,6 @@ const typeDefs = `
 
     type Query {
         zones: [Zone]
-        zone(id: String!): Zone
     }
     
     type Mutation {
