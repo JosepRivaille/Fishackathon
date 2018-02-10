@@ -3,16 +3,27 @@ import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 
 const typeDefs = `
-    type Author {
+    type Law {
         id: String
-        age: Int
-        name: String
-        books: [String]
+        title: String
+        abstract: String
+        resource: String
+        affectations: [Affectation]
     }
 
     type Query {
-        authors: [Author]
-        author(id: String!): Author
+        laws: [Law]
+        law(id: Int!): Law
+    }
+    
+    type Mutation {
+        addLaw(title: String!, abstract: String, resource: String!, affectations: [Affectation]): Law
+    }
+    
+    enum Affectation {
+        PROFESSIONAL
+        RECREATIONAL
+        DRAGGER
     }
 `;
 
