@@ -1,8 +1,5 @@
 # Fishackathon - frontend
 
-## Configuration
+## Access
 
-```
-npm install http-server -g
-http-server [path] -o
-```
+<http://ns300757.ip-91-121-64.eu:7070/>
