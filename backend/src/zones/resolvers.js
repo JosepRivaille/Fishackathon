@@ -4,9 +4,6 @@ const resolvers = {
     Query: {
         zones: () => {
             return ZoneModel.find({});
-        },
-        zone: (root, {id}) => {
-            return ZoneModel.find((law) => law.id === id);
         }
     },
     Mutation: {

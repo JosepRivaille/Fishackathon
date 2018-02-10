@@ -1,8 +1,10 @@
-import laws from './laws';
-import zones from './zones';
+import { mergeSchemas } from 'graphql-tools';
 
-const combine = (params) => {
-    return laws(params);
-};
+import laws from './laws/schema';
+import zones from './zones/schema';
 
-export default combine;
+const schema = mergeSchemas({
+    schemas: [laws, zones],
+});
+
+export default schema;
