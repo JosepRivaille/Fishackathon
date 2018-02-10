@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -79,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_dashboard:
                     selectedFragment = MapFragment.newInstance();
                     break;
-                case R.id.navigation_notifications:
-                    selectedFragment = MapFragment.newInstance();
+                case R.id.navigation_profile:
+                    selectedFragment = ProfileFragment.newInstance();
                     break;
             }
 
