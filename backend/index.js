@@ -7,6 +7,7 @@ import combine from './src';
 import schema from './src/laws/schema';
 
 const app = express();
+var mongoURL = "mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00-00-qtem3.mongodb.net:27017,thefisherpalace-shard-00-01-qtem3.mongodb.net:27017,thefisherpalace-shard-00-02-qtem3.mongodb.net:27017/test?ssl=true&replicaSet=TheFisherPalace-shard-0&authSource=admin";
 
 app.listen(3000, () => {
     console.log('Listening on port 3000');
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/Fishackathon')
+mongoose.connect(mongoURL)
     .then(() => console.log('Connecting to MongoDB'))
     .catch((err) => console.error(err));
 
