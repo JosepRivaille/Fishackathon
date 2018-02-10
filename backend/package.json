@@ -21,6 +21,7 @@
     "mongoose": "^5.0.4",
     "shp": "0.0.1",
     "shpjs": "^3.4.2"
+    "node-uuid": "^1.4.8"
   },
   "author": "",
   "license": "ISC"
