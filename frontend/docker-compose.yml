@@ -1,0 +1,12 @@
+version: '2'
+
+services:     
+  http-server:
+    container_name: http-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./public-html/:/usr/local/apache2/htdocs/
+    ports:
+      - "7070:80"
