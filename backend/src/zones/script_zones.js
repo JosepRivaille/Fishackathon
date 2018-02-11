@@ -131,7 +131,7 @@ function insideZones(res, lat, lng) {
 }
 
 function nearZones(res, lat, lng) {
-	var maxDistance = 3000;
+	var maxDistance = 1500;
 
 	ZoneModel.find({}, function (err, zones) {
 	    if (err) {
