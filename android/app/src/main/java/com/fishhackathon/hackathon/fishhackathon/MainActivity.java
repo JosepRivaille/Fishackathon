@@ -24,19 +24,50 @@ import io.nlopez.smartlocation.SmartLocation;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private BottomNavigationView navigation;
+    private Location lastLocation;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
+            String tag = null;
+            switch (item.getItemId()) {
+                case R.id.navigation_map:
+                    selectedFragment = MapFragment.newInstance();
+                    tag = MapFragment.TAG;
+                    break;
+                case R.id.navigation_dashboard:
+                    selectedFragment = ARFragment.newInstance();
+                    tag = ARFragment.TAG;
+                    break;
+                case R.id.navigation_profile:
+                    selectedFragment = ProfileFragment.newInstance();
+                    tag = ProfileFragment.TAG;
+                    break;
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment, tag).commit();
+                return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         navigation.setSelectedItemId(R.id.navigation_map);
 
         Dexter.withActivity(this)
                 .withPermissions(
+                        Manifest.permission.CAMERA,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                 ).withListener(new MultiplePermissionsListener() {
@@ -53,42 +84,35 @@ public class MainActivity extends AppCompatActivity {
         }).check();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SmartLocation.with(getApplicationContext()).location().stop();
+    }
+
     private void getLocation() {
         SmartLocation.with(getApplicationContext()).location()
-                .oneFix()
                 .start(new OnLocationUpdatedListener() {
                     @Override
                     public void onLocationUpdated(Location location) {
                         Log.e(TAG, "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
+                        lastLocation = location;
+
+                        ARFragment fragment = (ARFragment) getSupportFragmentManager().findFragmentByTag(ARFragment.TAG);
+                        if (fragment != null) {
+                            fragment.updateLatestLocation(location);
+                        }
                     }
                 });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    public boolean existsLastLocation() {
+        return lastLocation != null;
+    }
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
-
-            switch (item.getItemId()) {
-                case R.id.navigation_map:
-                    selectedFragment = MapFragment.newInstance();
-                    break;
-                case R.id.navigation_dashboard:
-                    selectedFragment = MapFragment.newInstance();
-                    break;
-                case R.id.navigation_profile:
-                    selectedFragment = ProfileFragment.newInstance();
-                    break;
-            }
-
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-                return true;
-            }
-            return false;
-        }
-    };
+    public Location getLastLocation() {
+        return lastLocation;
+    }
 
 }
