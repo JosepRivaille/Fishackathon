@@ -1,5 +1,6 @@
 import ZoneModel from './model';
 import inside from 'point-in-polygon';
+import classifyPoint from 'robust-point-in-polygon';
 
 module.exports = 
 {
@@ -100,17 +101,27 @@ function insideZones(res, lat, lng) {
 	     	console.log(err);
 	      	res.send("ERROR");
 	    } else {
-  			var result = [];
-
+  			var zonesInside = [];
 			zones.forEach(function(zone){
 				zone.polygon.forEach(function(polygon){
 					var polygonArray = polygon.map( Object.values );
 
-					var isInside = inside(coordinates, polygonArray);
-					if (isInside) result.push(zone);
+					//var isInside = inside(coordinates, polygonArray);
+					var isInside = classifyPoint(polygonArray, coordinates);
+					if (isInside) zonesInside.push(zone);
 				})
 			})
-			res.send(result);
+
+			var numCharsSmallestZoneCode = 0;
+  			var smallestZoneInside = {};
+			zonesInside.forEach(function(zone){
+				if (numCharsSmallestZoneCode < zone.code.length) {
+					numCharsSmallestZoneCode = zone.code.length;
+					smallestZoneInside = zone;
+				}
+			})
+
+			res.send(zonesInside);
 	    }
   	});	
 }
