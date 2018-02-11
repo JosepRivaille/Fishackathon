@@ -12,7 +12,7 @@ public class LocationHelper {
         if (distance > 1000) {
             result = (float) ((int) (distance / 100)) / 10 + "km";
         } else {
-            result = distance + "m";
+            result = ((int) distance) + "m";
         }
         return result;
     }
