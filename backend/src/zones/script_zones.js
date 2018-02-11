@@ -29,38 +29,50 @@ function insertZones() {
 	for(var i = 0; i < features.length; i++) {
 		var properties = features[i]["properties"];
 		var code = properties["F_CODE"];
-		var level = properties["F_LEVEL"];
-		var ocean = properties["OCEAN"].toUpperCase();
-		if (!["ATLANTIC", "INDIAN", "PACIFIC", "ARTIC"].includes(ocean)) ocean = "ATLANTIC";
-		var parent = "";
-		if (level === "SUBAREA") parent = properties["F_AREA"];
-		else if (level === "DIVISION") parent = properties["F_SUBAREA"];
-		else if (level === "SUBDIVISION") parent = properties["F_DIVISION"];
-		else if (level === "SUBUNIT") parent = properties["F_SUBDIVIS"];
+		if (code == "37.1") {
+			console.log("HOLA")
+			console.log(properties);
+			var level = properties["F_LEVEL"];
+			var ocean = properties["OCEAN"].toUpperCase();
+			if (!["ATLANTIC", "INDIAN", "PACIFIC", "ARTIC"].includes(ocean)) ocean = "ATLANTIC";
+			var parent = "";
+			if (level === "SUBAREA") parent = properties["F_AREA"];
+			else if (level === "DIVISION") parent = properties["F_SUBAREA"];
+			else if (level === "SUBDIVISION") parent = properties["F_DIVISION"];
+			else if (level === "SUBUNIT") parent = properties["F_SUBDIVIS"];
 
-		var geometry = features[i]["geometry"];
-		var coordinates = [];
-		var centroids = [];
-		geometry.coordinates.forEach(function(polygon){
-			var polygoncoords = [];
-		   	polygon.forEach(function(linearring){
-				var firstring = linearring[0];
-				var latlong = {
-			   		lat: firstring[1],
-	        		lng: firstring[0]
-	    		}
-			   	polygoncoords.push(latlong);
-			});
-			if (polygoncoords.length > 1) coordinates.push(polygoncoords);
+			var geometry = features[i]["geometry"];
+			var coordinates = [];
+			var centroids = [];
 
-			var centerpolygon = computeCenterOfPolygon(polygoncoords);
-			centroids.push(centerpolygon);
-		});
-		var centroidLat = centroids.reduce((a, o, i, p) => a + o.lat / p.length, 0);
-		var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
-		var centroid = {lat: centroidLat, lng: centroidLng};
+			console.log(geometry);
 
-		if (coordinates.length > 0) createZone(code, level, ocean, parent, coordinates, centroid);
+			//console.log(geometry.coordinates)
+			for (var p = 0; p < geometry.coordinates.length; ++p) {
+				var polygon = geometry.coordinates[p];
+				var firstring = polygon[0];
+				var polygoncoords = []
+				firstring.forEach(function(point){
+					var latlong = {
+				   		lat: point[1],
+		        		lng: point[0]
+		    		}
+				   	polygoncoords.push(latlong);
+				});
+				var centerpolygon = computeCenterOfPolygon(polygoncoords);
+				centroids.push(centerpolygon);
+
+				coordinates.push(polygoncoords);
+			}
+
+			var centroidLat = centroids.reduce((a, o, i, p) => a + o.lat / p.length, 0);
+			var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
+			var centroid = {lat: centroidLat, lng: centroidLng};
+
+			console.log(coordinates);
+
+			if (coordinates.length > 0) createZone(code, level, ocean, parent, coordinates, centroid);
+		}
 	}
 }
 

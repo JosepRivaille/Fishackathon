@@ -44,9 +44,9 @@ app.get('/myzones', (req, res) => {
     var zoneUtils = require('./src/zones/script_zones');
 
     //zoneUtils.deleteZones();
-    //zoneUtils.insertZones();
+    zoneUtils.insertZones();
 
-    zoneUtils.insideZones(res, lat, lng);
+    //zoneUtils.insideZones(res, lat, lng);
 });
 
 app.get('/nearzones', (req, res) => {
