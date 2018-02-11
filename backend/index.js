@@ -39,42 +39,17 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 import ZoneModel from './src/zones/model';
 
 app.get('/zones', (req, res) => {
-	var lat = 16.867274999999992;
-	var lng = -74.52985;
+	var lat = 160.867274999999992;
+	var lng = -70.52985;
 	
 	var zoneUtils = require('./src/zones/script_zones');
 
 	//zoneUtils.deleteZones();
 	//zoneUtils.insertZones();
-	//zoneUtils.insidePolygon(lat, lng);
 
-	zoneUtils.nearZones(res, lat, lng);
+	zoneUtils.insideZones(res, lat, lng);
+	//zoneUtils.nearZones(res, lat, lng);
 	//res.send(JSON.stringify(result));
 
 	
 });
-
-
-
-
-
-import inside from 'point-in-polygon';
-
-function insidePolygon(lat, lng) {
-	//var coordinates = [lat, lng];
-
-	var result = ZoneModel.findOne( { 'code': '21' } );
-
-	/*
-	var zones = [];
-	var zoneinsideId = -1;
-	zones.forEach(function(zone){
-		zone.polygon.forEach(function(polygon){
-			var isInside = inside(coordinates, polygon);
-			if (isInside) zoneinsideId = zone.code;
-		})
-	})
-	*/
-
-	return result;
-}

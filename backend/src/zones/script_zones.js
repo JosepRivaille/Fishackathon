@@ -1,10 +1,12 @@
 import ZoneModel from './model';
+import inside from 'point-in-polygon';
 
 module.exports = 
 {
   deleteZones: function () {deleteZones()},
   insertZones: function () {insertZones()},
   nearZones: function (res, lat, lng) {nearZones(res, lat, lng)},
+  insideZones: function (res, lat, lng) {insideZones(res, lat, lng)},
   getDistanceFromLatLonInKm: function (lat1,lon1,lat2,lon2) {getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2)}
 };
 
@@ -90,7 +92,28 @@ function computeCenterOfPolygon(polygon) {
 	return center;
 }
 
+function insideZones(res, lat, lng) {
+	var coordinates = [lat, lng];
 
+	ZoneModel.find({}, function (err, zones) {
+	    if (err) {
+	     	console.log(err);
+	      	res.send("ERROR");
+	    } else {
+  			var result = [];
+
+			zones.forEach(function(zone){
+				zone.polygon.forEach(function(polygon){
+					var polygonArray = polygon.map( Object.values );
+
+					var isInside = inside(coordinates, polygonArray);
+					if (isInside) result.push(zone);
+				})
+			})
+			res.send(result);
+	    }
+  	});	
+}
 
 function nearZones(res, lat, lng) {
 	var maxDistance = 5000;
@@ -108,7 +131,6 @@ function nearZones(res, lat, lng) {
 					result.push(zone);
 				}
 			})
-			console.log(result);
 			res.send(result);
 	    }
   	});	
