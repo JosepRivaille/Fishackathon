@@ -80,7 +80,8 @@ public class AROverlayView extends View {
                 float y = (0.5f - cameraCoordinateVector[1] / cameraCoordinateVector[3]) * canvas.getHeight();
 
                 canvas.drawCircle(x, y, circleRadius, paint);
-                canvas.drawText(arPoints.get(i).getName(), x - (30 * arPoints.get(i).getName().length() / 2), y - 80, paint);
+                String distanceFormatted = LocationHelper.getLocationFormatted(currentLocation, arPoints.get(i).getLocation());
+                canvas.drawText(arPoints.get(i).getName() + ", " + distanceFormatted, x - (30 * arPoints.get(i).getName().length() / 2), y - 80, paint);
             }
         }
 
@@ -108,7 +109,9 @@ public class AROverlayView extends View {
                     canvas.drawCircle(xA, yA, circleRadius, paint);
                 }
                 if (arLines.get(i).isDrawLabels()) {
-                    canvas.drawText(arLines.get(i).getPointA().getName(), xA - (30 * arLines.get(i).getPointA().getName().length() / 2), yA - 80, paint);
+                    String distanceFormatted = LocationHelper.getLocationFormatted(currentLocation, arLines.get(i).getPointA().getLocation());
+                    canvas.drawText(arLines.get(i).getPointA().getName() + ", " + distanceFormatted,
+                            xA - (30 * arLines.get(i).getPointA().getName().length() / 2), yA - 80, paint);
                 }
                 drawA = true;
             }
@@ -131,7 +134,9 @@ public class AROverlayView extends View {
                     canvas.drawCircle(xB, yB, circleRadius, paint);
                 }
                 if (arLines.get(i).isDrawLabels()) {
-                    canvas.drawText(arLines.get(i).getPointB().getName(), xB - (30 * arLines.get(i).getPointB().getName().length() / 2), yB - 80, paint);
+                    String distanceFormatted = LocationHelper.getLocationFormatted(currentLocation, arLines.get(i).getPointB().getLocation());
+                    canvas.drawText(arLines.get(i).getPointB().getName() + ", " + distanceFormatted,
+                            xB - (30 * arLines.get(i).getPointB().getName().length() / 2), yB - 80, paint);
                 }
                 drawB = true;
             }
