@@ -2,9 +2,21 @@ import ZoneModel from './model';
 
 module.exports = 
 {
+  deleteZones: function () {deleteZones()},
   insertZones: function () {insertZones()},
-  nearZones: function (lat, lng) {nearZones(lat, lng)}
+  nearZones: function (res, lat, lng) {nearZones(res, lat, lng)},
+  getDistanceFromLatLonInKm: function (lat1,lon1,lat2,lon2) {getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2)}
 };
+
+function deleteZones() {
+	ZoneModel.deleteMany({}, function (err, r) {
+	    if (err) {
+	      console.log(err)
+	    } else {
+	      console.log("OK")
+	    }
+	  });
+}
 
 function insertZones() {
 	var fs = require('fs');
@@ -80,27 +92,26 @@ function computeCenterOfPolygon(polygon) {
 
 
 
-function nearZones(lat, lng) {
-	var maxDistance = 1000;
-	var zones = ZoneModel.find({});
-	//var zones = ZoneModel.dataSize();
-	console.log(zones);
+function nearZones(res, lat, lng) {
+	var maxDistance = 5000;
 
-	/*
-	var zones = ZoneModel.findOne( { 'code': '21' } );
-	var result = [];
-	zones.forEach(function(zone){
-		zone.polygon.forEach(function(polygon){
-			var distFromZone = getDistanceFromLatLonInKm(lat, lng, polygon.centroid.lat, polygon.centroid.lng);
-			if (distFromZone < maxDistance) {
-				result.push(zone);
-			}
-		})
-	})
+	ZoneModel.find({}, function (err, zones) {
+	    if (err) {
+	     	console.log(err);
+	      	res.send("ERROR");
+	    } else {
+  			var result = [];
 
-	return result;
-	*/
-	return zones;
+			zones.forEach(function(zone){
+				var distFromZone = getDistanceFromLatLonInKm(lat, lng, zone.centroid.lat, zone.centroid.lng);
+				if (distFromZone < maxDistance) {
+					result.push(zone);
+				}
+			})
+			console.log(result);
+			res.send(result);
+	    }
+  	});	
 }
 
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {

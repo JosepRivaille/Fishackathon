@@ -34,23 +34,31 @@ app.use('/graphiql', graphiqlExpress({
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 
-app.get('/zones', (req, res) => {
-	var lat = 2.13;
-	var lng = 41.3;
 
+
+import ZoneModel from './src/zones/model';
+
+app.get('/zones', (req, res) => {
+	var lat = 16.867274999999992;
+	var lng = -74.52985;
+	
 	var zoneUtils = require('./src/zones/script_zones');
 
+	//zoneUtils.deleteZones();
 	//zoneUtils.insertZones();
 	//zoneUtils.insidePolygon(lat, lng);
 
-	var result = zoneUtils.nearZones(lat, lng);
-	res.send(result);
+	zoneUtils.nearZones(res, lat, lng);
+	//res.send(JSON.stringify(result));
+
+	
 });
 
 
 
+
+
 import inside from 'point-in-polygon';
-import ZoneModel from './src/zones/model';
 
 function insidePolygon(lat, lng) {
 	//var coordinates = [lat, lng];
