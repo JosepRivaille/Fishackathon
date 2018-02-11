@@ -9,7 +9,7 @@ const app = express();
 const mongoURL = 'mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00-00-qtem3.mongodb.net:27017,' +
     'thefisherpalace-shard-00-01-qtem3.mongodb.net:27017,thefisherpalace-shard-00-02-qtem3.mongodb.net:27017' +
     '/test?ssl=true&replicaSet=TheFisherPalace-shard-0&authSource=admin';
-const portToListen = 8080;
+const portToListen = process.env.PORT || 3000;
 app.listen(portToListen, () => {
     console.log('Listening on port '+portToListen);
 });
