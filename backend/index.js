@@ -36,8 +36,8 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 
 app.get('/zones', (req, res) => {
 	//insertZones();
-	insidePolygon();
-	res.send("OK");
+	//var result = insidePolygon();
+	//res.send(result);
 });
 
 
@@ -63,5 +63,4 @@ function insidePolygon() {//lat, lng) {
 
 	return result;
 }
-
 

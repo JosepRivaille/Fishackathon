@@ -10,6 +10,7 @@ const typeDefs = `
         ocean: Ocean
         parent: String
         polygon: [[LatLng]]
+        centroid: LatLng
         laws: [String]
     }
     

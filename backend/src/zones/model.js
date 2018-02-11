@@ -39,6 +39,9 @@ const zoneSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
+    centroid: {
+        type: Object
+    },
     laws: {
         type: [String]
     }
