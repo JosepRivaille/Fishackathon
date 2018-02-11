@@ -14,6 +14,7 @@ import android.widget.Switch;
 import com.fishhackathon.hackathon.fishhackathon.models.Profile;
 
 public class ProfileFragment extends Fragment {
+    public static final String TAG = ProfileFragment.class.getSimpleName();
     private View rootView;
     private ArrayAdapter<String> sizeOfShipAdapter;
     private ArrayAdapter<String> typeOfShipAdapter;
@@ -53,9 +54,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUpElements() {
-        sizeOfShipSpinner = (Spinner) rootView.findViewById(R.id.profile_tamano_embarcacion_spinner);
-        typeOfShipSpinner = (Spinner) rootView.findViewById(R.id.profile_tipo_embarcacion_spinner);
-        professionalSwitch = (Switch) rootView.findViewById(R.id.profile_uso_embarcacion_switch);
+        sizeOfShipSpinner = rootView.findViewById(R.id.profile_tamano_embarcacion_spinner);
+        typeOfShipSpinner = rootView.findViewById(R.id.profile_tipo_embarcacion_spinner);
+        professionalSwitch = rootView.findViewById(R.id.profile_uso_embarcacion_switch);
     }
 
     private void setUpListeners() {

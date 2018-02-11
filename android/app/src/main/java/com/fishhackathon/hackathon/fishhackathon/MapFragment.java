@@ -1,6 +1,5 @@
 package com.fishhackathon.hackathon.fishhackathon;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +20,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 public class MapFragment extends Fragment {
+    public static final String TAG = MapFragment.class.getSimpleName();
     private View rootView;
     private TextView zoomInView;
     private TextView zoomOutView;
@@ -86,10 +86,10 @@ public class MapFragment extends Fragment {
     }
 
     private void setUpElements() {
-        osmMap = (MapView) rootView.findViewById(R.id.osmap);
-        zoomInView = (TextView) rootView.findViewById(R.id.home_zoom_in);
-        zoomOutView = (TextView) rootView.findViewById(R.id.home_zoom_out);
-        legendView = (TextView) rootView.findViewById(R.id.home_legend);
+        osmMap = rootView.findViewById(R.id.osmap);
+        zoomInView = rootView.findViewById(R.id.home_zoom_in);
+        zoomOutView = rootView.findViewById(R.id.home_zoom_out);
+        legendView = rootView.findViewById(R.id.home_legend);
     }
 
     private void setUpListeners() {
