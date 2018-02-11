@@ -154,7 +154,9 @@ function nearZones(res, lat, lng) {
         $or: [
             {code: {$eq: "34.1.11"}},
             {code: {$eq: "27.8.e.1"}},
-            {code: {$eq: "31.1.12"}}
+            {code: {$eq: "31.1.12"}},
+            {code: {$eq: "27.9.b.2"}},
+            {code: {$eq: "27.4.a"}},
         ]
     }, function (err, zones) {
         if (err) {
@@ -164,6 +166,7 @@ function nearZones(res, lat, lng) {
             var result = [];
 
             zones.forEach(function (zone) {
+                let aux = zone;
                 var zoneIsNear = false;
                 var i = 0;
                 while (!zoneIsNear && i < zone.polygon.length) {
@@ -173,7 +176,7 @@ function nearZones(res, lat, lng) {
                         var distFromZone = getDistanceFromLatLonInKm(lat, lng, point.lat, point.lng);
                         if (distFromZone < maxDistance) {
                             zoneIsNear = true;
-                            zone.laws = [
+                            aux.lawss = [
                                 {
                                     "id": "67fc9420-0f1b-11e8-a6be-53fb65ec0967",
                                     "title": "RD 347/11",
@@ -425,7 +428,8 @@ function nearZones(res, lat, lng) {
                                     ]
                                 }
                             ];
-                            result.push(zone);
+                            console.log(aux.lawss);
+                            result.push(aux);
                         }
                         ++j;
                     }
