@@ -38,9 +38,9 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 
 import ZoneModel from './src/zones/model';
 
-app.get('/zones', (req, res) => {
-	var lat = 160.867274999999992;
-	var lng = -70.52985;
+app.get('/myzones', (req, res) => {
+	var lat = req.query.lat;
+	var lng = req.query.lng;
 	
 	var zoneUtils = require('./src/zones/script_zones');
 
@@ -48,8 +48,12 @@ app.get('/zones', (req, res) => {
 	//zoneUtils.insertZones();
 
 	zoneUtils.insideZones(res, lat, lng);
-	//zoneUtils.nearZones(res, lat, lng);
-	//res.send(JSON.stringify(result));
+});
 
+app.get('/nearzones', (req, res) => {
+	var lat = req.query.lat;
+	var lng = req.query.lng;
 	
+	var zoneUtils = require('./src/zones/script_zones');
+	zoneUtils.nearZones(res, lat, lng);
 });
