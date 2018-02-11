@@ -25,5 +25,8 @@
     "shp": "0.0.1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "start": "npm build"
+  }
 }
