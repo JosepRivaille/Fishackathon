@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import {graphqlExpress, graphiqlExpress} from 'apollo-server-express';
 
 import schema from './src';
-import {getFilteredZones} from './src/zones/script_zones';
+import {nearZones} from './src/zones/script_zones';
 
 const app = express();
 const mongoURL = 'mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00-00-qtem3.mongodb.net:27017,' +
@@ -56,5 +56,5 @@ app.get('/nearzones', (req, res) => {
         shipSize, professional, kind
     };
 
-    getFilteredZones(res, coords, today, attributes);
+    nearZones(res, lat, lng);
 });
