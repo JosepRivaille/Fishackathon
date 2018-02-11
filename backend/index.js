@@ -33,3 +33,35 @@ app.use('/graphiql', graphiqlExpress({
 }));
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
+
+app.get('/zones', (req, res) => {
+	//insertZones();
+	insidePolygon();
+	res.send("OK");
+});
+
+
+
+import inside from 'point-in-polygon';
+import ZoneModel from './src/zones/model';
+
+function insidePolygon() {//lat, lng) {
+	//var coordinates = [lat, lng];
+
+	var result = ZoneModel.findOne( { 'code': '21' } );
+
+	/*
+	var zones = [];
+	var zoneinsideId = -1;
+	zones.forEach(function(zone){
+		zone.polygon.forEach(function(polygon){
+			var isInside = inside(coordinates, polygon);
+			if (isInside) zoneinsideId = zone.code;
+		})
+	})
+	*/
+
+	return result;
+}
+
+

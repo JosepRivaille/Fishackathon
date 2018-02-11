@@ -9,7 +9,7 @@ const typeDefs = `
         level: Level
         ocean: Ocean
         parent: String
-        polygon: [LatLng]
+        polygon: [[LatLng]]
         laws: [String]
     }
     
@@ -49,7 +49,7 @@ const typeDefs = `
             level: Level!,
             parent: String,
             ocean: Ocean!,
-            polygon: [LatLng2]!,
+            polygon: [[LatLng2]]!,
             laws: [String]
         ): Zone
     }
