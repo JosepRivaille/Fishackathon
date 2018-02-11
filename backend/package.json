@@ -27,6 +27,6 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start": "npm build"
+    "start": "npm run build"
   }
 }
