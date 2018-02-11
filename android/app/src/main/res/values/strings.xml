@@ -21,4 +21,10 @@
     <string name="filter_fin_hint_pesca">Introduzca el fin de la pesca…</string>
     <string name="filter_no_save">No guardar</string>
     <string name="filter_save">Guardar</string>
+
+    <string name="zone_detalle_titulo">Información de zona</string>
+    <string name="zone_detalle_code">Código</string>
+    <string name="zone_detalle_nivel">Nivel</string>
+    <string name="zone_detalle_oceano">Oceano</string>
+    <string name="zone_detalle_leyes">Leyes</string>
 </resources>

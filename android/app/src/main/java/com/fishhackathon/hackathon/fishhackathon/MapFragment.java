@@ -156,8 +156,8 @@ public class MapFragment extends Fragment {
                                     polygon.setTitle("Zona: " + currentZone.getCode());
                                     polygon.setSubDescription("Level: " + currentZone.getLevel() + ", Ocean: " + currentZone.getOcean());
                                     polygon.setVisible(true);
-                                    polygon.setFillColor(Color.parseColor("#9668e96e"));
-                                    polygon.setStrokeColor(Color.GREEN);
+                                    polygon.setFillColor(Color.parseColor("#82e53935"));
+                                    polygon.setStrokeColor(Color.RED);
                                     polygon.setStrokeWidth(10);
                                     polygon.setInfoWindow(new CustomInfoWindow(getContext(), osmMap));
                                     List<GeoPoint> geoPoints = new ArrayList<>();
