@@ -99,9 +99,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
                         lastLocation = location;
 
-                        ARFragment fragment = (ARFragment) getSupportFragmentManager().findFragmentByTag(ARFragment.TAG);
-                        if (fragment != null) {
-                            fragment.updateLatestLocation(location);
+                        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+                        if (mapFragment != null) {
+                            mapFragment.updateLatestLocation(location);
+                        }
+
+                        ARFragment arFragment = (ARFragment) getSupportFragmentManager().findFragmentByTag(ARFragment.TAG);
+                        if (arFragment != null) {
+                            arFragment.updateLatestLocation(location);
                         }
                     }
                 });

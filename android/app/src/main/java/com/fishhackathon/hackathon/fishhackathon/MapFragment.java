@@ -1,6 +1,7 @@
 package com.fishhackathon.hackathon.fishhackathon;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 public class MapFragment extends Fragment {
@@ -26,6 +28,8 @@ public class MapFragment extends Fragment {
     private TextView zoomOutView;
     private TextView legendView;
     private MapView osmMap;
+
+    private Location currentLocation;
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -55,9 +59,6 @@ public class MapFragment extends Fragment {
         osmMap.setMultiTouchControls(true);
         addOverlay();
 
-        //Geopoint located in Cadiz - Campus Puerto Real
-        centerMap(new GeoPoint(36.528869, -6.213082));
-
         return rootView;
     }
 
@@ -66,6 +67,17 @@ public class MapFragment extends Fragment {
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.map_legend_alert, null));
         dialogBuilder.create();
         dialogBuilder.show();
+    }
+
+    private void addMarker(GeoPoint geoPoint) {
+        Marker marker = new Marker(osmMap);
+        marker.setPosition(geoPoint);
+        //marker.setIcon(drawable);
+        //marker.setImage(drawable);
+        marker.setTitle("Current Location");
+        marker.showInfoWindow();
+        osmMap.getOverlays().add(marker);
+        osmMap.invalidate();
     }
 
     private void addOverlay() {
@@ -114,5 +126,14 @@ public class MapFragment extends Fragment {
                 showLegend();
             }
         });
+    }
+
+    public void updateLatestLocation(Location location) {
+        currentLocation = location;
+
+        //Geopoint located in current user position
+        GeoPoint geoPointCenter = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+        addMarker(geoPointCenter);
+        centerMap(geoPointCenter);
     }
 }
