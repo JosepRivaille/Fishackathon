@@ -57,11 +57,3 @@ app.get('/nearzones', (req, res) => {
 	var zoneUtils = require('./src/zones/script_zones');
 	zoneUtils.nearZones(res, lat, lng);
 });
-
-app.get('/areas', (req, res) => {
-   const lat = req.query.lat;
-   const lng = req.query.lng;
-
-
-   res.send();
-});

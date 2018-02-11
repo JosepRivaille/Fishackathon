@@ -41,7 +41,7 @@ const typeDefs = `
     }
 
     type Query {
-        zones: [Zone]
+        zones(lat: Float, lng: Float): [Zone]
     }
     
     type Mutation {

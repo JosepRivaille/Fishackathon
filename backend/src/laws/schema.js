@@ -9,6 +9,18 @@ const typeDefs = `
         abstract: String
         resource: String
         affects: [Classification]
+        time: TimeWindow
+        affectsIn: Int
+    }
+    
+    type TimeWindow {
+        start: String
+        end: String
+    }
+    
+    input TimeWindow2 {
+        start: String
+        end: String
     }
 
     type Query {
@@ -22,7 +34,8 @@ const typeDefs = `
             abstract: String,
             resource: String!,
             affects: [Classification],
-            bans: [Classification]
+            timeWindow: TimeWindow2
+            affectsIn: Int
         ): Law
     }
     
@@ -30,6 +43,12 @@ const typeDefs = `
         PROFESSIONAL
         RECREATIONAL
         DRAGGER
+        FENCE
+        NET
+        FLY
+        TRAP
+        CORAL
+        HOOK
     }
 `;
 

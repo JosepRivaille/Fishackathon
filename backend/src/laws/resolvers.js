@@ -12,13 +12,14 @@ const resolvers = {
     },
     Mutation: {
         addLaw: (root, params) => {
-            const {title, abstract, resource, affects} = params;
+            const {title, abstract, resource, affects, timeWindow} = params;
             const law = new LawModel({
                 id: undefined,
                 title,
                 abstract,
                 resource,
-                affects
+                affects,
+                timeWindow
             });
             return law.save();
         }
