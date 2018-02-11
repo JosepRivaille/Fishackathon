@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">FishHackathon</string>
-    
+
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_profile">Profile</string>
+    <string name="title_filter">Filters</string>
 
     <string name="profile_embarcaciones">Embarcación</string>
     <string name="profile_tamano_embarcacion">Tamaño de embarcación</string>
@@ -12,4 +13,12 @@
     <string name="profile_recreo_embarcacion">Recreo</string>
     <string name="profile_especies">Especies</string>
     <string name="profile_tipo_especies">Especies a seguir</string>
+
+    <string name="filter_fecha_pesca">Periodo de pesca</string>
+    <string name="filter_inicio_pesca">Inicio</string>
+    <string name="filter_inicio_hint_pesca">Introduzca el inicio de la pesca…</string>
+    <string name="filter_fin_pesca">Fin</string>
+    <string name="filter_fin_hint_pesca">Introduzca el fin de la pesca…</string>
+    <string name="filter_no_save">No guardar</string>
+    <string name="filter_save">Guardar</string>
 </resources>

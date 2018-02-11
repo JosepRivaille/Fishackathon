@@ -1,6 +1,7 @@
 package com.fishhackathon.hackathon.fishhackathon;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,13 +9,23 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fishhackathon.hackathon.fishhackathon.controllers.APIController;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -23,6 +34,7 @@ import io.nlopez.smartlocation.SmartLocation;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int RESULT_FOR_FILTER = 288;
     private BottomNavigationView navigation;
     private Location lastLocation;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -85,6 +97,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_filter:
+                startActivityForResult(new Intent(MainActivity.this, FilterActivity.class), RESULT_FOR_FILTER);
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 
@@ -102,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
                         if (mapFragment != null) {
                             mapFragment.updateLatestLocation(location);
+                            mapFragment.updateMapInformation(location);
                         }
 
                         ARFragment arFragment = (ARFragment) getSupportFragmentManager().findFragmentByTag(ARFragment.TAG);
@@ -120,4 +150,20 @@ public class MainActivity extends AppCompatActivity {
         return lastLocation;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == RESULT_FOR_FILTER) {
+            Bundle bundle = data.getExtras();
+            assert bundle != null;
+            String fromDate = bundle.getString(FilterActivity.KEY_DATE_FROM);
+            String toDate = bundle.getString(FilterActivity.KEY_DATE_TO);
+
+            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+            if (mapFragment != null) {
+                mapFragment.updateMapInformation(fromDate, toDate);
+            }
+        }
+    }
 }

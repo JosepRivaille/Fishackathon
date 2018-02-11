@@ -1,5 +1,6 @@
 package com.fishhackathon.hackathon.fishhackathon;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -7,11 +8,25 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.fishhackathon.hackathon.fishhackathon.controllers.APIController;
+import com.fishhackathon.hackathon.fishhackathon.controllers.VolleyController;
+import com.fishhackathon.hackathon.fishhackathon.models.MapGeoPoint;
+import com.fishhackathon.hackathon.fishhackathon.models.MapPolygon;
+import com.fishhackathon.hackathon.fishhackathon.models.Zone;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
@@ -19,7 +34,12 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.TilesOverlay;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment {
     public static final String TAG = MapFragment.class.getSimpleName();
@@ -30,6 +50,7 @@ public class MapFragment extends Fragment {
     private MapView osmMap;
 
     private Location currentLocation;
+    private ArrayList<Zone> zones;
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -64,6 +85,99 @@ public class MapFragment extends Fragment {
         addOverlay();
 
         return rootView;
+    }
+
+    public void updateMapInformation(String fromDate, String toDate) {
+        updateMapInformationPrivate(currentLocation, fromDate, toDate);
+    }
+
+    public void updateMapInformation() {
+        updateMapInformationPrivate(currentLocation, null, null);
+    }
+
+    public void updateMapInformation(Location location) {
+        updateMapInformationPrivate(location, null, null);
+    }
+
+    private void updateMapInformationPrivate(Location location, String fromDate, String toDate) {
+        zones = new ArrayList<>();
+
+        String url = APIController.getURLForNearZones(location.getLatitude(), location.getLongitude());
+        Log.e(TAG, "Location: " + location.getLatitude() + ", " + location.getLongitude()
+                + ", from: " + fromDate + ", to: " + toDate);
+        Log.e(TAG, url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.e(TAG, response.toString());
+                        for (int i = 0; i < response.length(); ++i) {
+                            try {
+                                JSONObject zoneJson = response.getJSONObject(i);
+
+                                String zoneId = zoneJson.getString("id");
+                                String laws = zoneJson.getString("laws");
+                                String code = zoneJson.getString("code");
+                                String level = zoneJson.getString("level");
+                                String ocean = zoneJson.getString("ocean");
+                                JSONArray allPolygonsJsonArray = zoneJson.getJSONArray("polygon");
+                                ArrayList<MapPolygon> mapPolygons = new ArrayList<>();
+                                for (int j = 0; j < allPolygonsJsonArray.length(); ++j) {
+                                    JSONArray polygonJsonArray = allPolygonsJsonArray.getJSONArray(j);
+
+                                    ArrayList<MapGeoPoint> mapGeoPoints = new ArrayList<>();
+                                    for (int k = 0; k < polygonJsonArray.length(); ++k) {
+                                        JSONObject pointJson = polygonJsonArray.getJSONObject(k);
+                                        double pointLat = pointJson.getDouble("lat");
+                                        double pointLng = pointJson.getDouble("lng");
+                                        mapGeoPoints.add(new MapGeoPoint(pointLat, pointLng));
+                                    }
+                                    mapPolygons.add(new MapPolygon(mapGeoPoints));
+                                }
+
+                                zones.add(new Zone(zoneId, code, laws, level, ocean, mapPolygons));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (zones != null) {
+                            for (int i = 0; i < zones.size(); ++i) {
+                                Zone currentZone = zones.get(i);
+                                if (currentZone.getCode().contains(".")) {
+                                    //continue;
+                                }
+                                for (int j = 0; j < currentZone.getPolygons().size(); ++j) {
+                                    MapPolygon currentMapPolygon = currentZone.getPolygons().get(j);
+
+                                    Polygon polygon = new Polygon();
+                                    polygon.setTitle("Zona: " + currentZone.getCode());
+                                    polygon.setSubDescription("Level: " + currentZone.getLevel() + ", Ocean: " + currentZone.getOcean());
+                                    polygon.setVisible(true);
+                                    polygon.setFillColor(Color.parseColor("#9668e96e"));
+                                    polygon.setStrokeColor(Color.GREEN);
+                                    polygon.setStrokeWidth(10);
+                                    polygon.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, osmMap));
+                                    List<GeoPoint> geoPoints = new ArrayList<>();
+                                    for (int k = 0; k < currentMapPolygon.getPointsArrayList().size(); ++k) {
+                                        MapGeoPoint mapGeoPoint = currentMapPolygon.getPointsArrayList().get(k);
+                                        geoPoints.add(new GeoPoint(mapGeoPoint.getLat(), mapGeoPoint.getLng()));
+                                    }
+                                    polygon.setPoints(geoPoints);
+                                    osmMap.getOverlayManager().add(polygon);
+                                }
+                            }
+                            osmMap.invalidate();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "ErrorResponse: " + error.getLocalizedMessage());
+            }
+        });
+        VolleyController.getInstance(getContext()).addToQueue(jsonArrayRequest);
     }
 
     private void showLegend() {
@@ -133,11 +247,13 @@ public class MapFragment extends Fragment {
     }
 
     public void updateLatestLocation(Location location) {
-        currentLocation = location;
+        if (currentLocation == null) {
+            //Geopoint located in current user position
+            GeoPoint geoPointCenter = new GeoPoint(location.getLatitude(), location.getLongitude());
+            addMarker(geoPointCenter);
+            centerMap(geoPointCenter);
+        }
 
-        //Geopoint located in current user position
-        GeoPoint geoPointCenter = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-        addMarker(geoPointCenter);
-        centerMap(geoPointCenter);
+        currentLocation = location;
     }
 }
