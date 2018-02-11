@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel-watch index.js"
+    "build": "babel-watch index.js",
+    "start": "babel-watch index.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -14,6 +15,7 @@
   "dependencies": {
     "apollo-server-express": "^1.3.2",
     "axios": "^0.17.1",
+    "babel-core": "^6.26.0",
     "babel-watch": "^2.0.7",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
@@ -25,8 +27,5 @@
     "shp": "0.0.1"
   },
   "author": "",
-  "license": "ISC",
-  "scripts": {
-    "start": "npm build"
-  }
+  "license": "ISC"
 }
