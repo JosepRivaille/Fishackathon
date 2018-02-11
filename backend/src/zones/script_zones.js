@@ -29,50 +29,42 @@ function insertZones() {
 	for(var i = 0; i < features.length; i++) {
 		var properties = features[i]["properties"];
 		var code = properties["F_CODE"];
-		if (code == "37.1") {
-			console.log("HOLA")
-			console.log(properties);
-			var level = properties["F_LEVEL"];
-			var ocean = properties["OCEAN"].toUpperCase();
-			if (!["ATLANTIC", "INDIAN", "PACIFIC", "ARTIC"].includes(ocean)) ocean = "ATLANTIC";
-			var parent = "";
-			if (level === "SUBAREA") parent = properties["F_AREA"];
-			else if (level === "DIVISION") parent = properties["F_SUBAREA"];
-			else if (level === "SUBDIVISION") parent = properties["F_DIVISION"];
-			else if (level === "SUBUNIT") parent = properties["F_SUBDIVIS"];
+		var level = properties["F_LEVEL"];
+		var ocean = properties["OCEAN"].toUpperCase();
+		if (!["ATLANTIC", "INDIAN", "PACIFIC", "ARTIC"].includes(ocean)) ocean = "ATLANTIC";
+		var parent = "";
+		if (level === "SUBAREA") parent = properties["F_AREA"];
+		else if (level === "DIVISION") parent = properties["F_SUBAREA"];
+		else if (level === "SUBDIVISION") parent = properties["F_DIVISION"];
+		else if (level === "SUBUNIT") parent = properties["F_SUBDIVIS"];
 
-			var geometry = features[i]["geometry"];
-			var coordinates = [];
-			var centroids = [];
+		var geometry = features[i]["geometry"];
+		var coordinates = [];
+		var centroids = [];
 
-			console.log(geometry);
+		//console.log(geometry.coordinates)
+		for (var p = 0; p < geometry.coordinates.length; ++p) {
+			var polygon = geometry.coordinates[p];
+			var firstring = polygon[0];
+			var polygoncoords = []
+			firstring.forEach(function(point){
+				var latlong = {
+			   		lat: point[1],
+	        		lng: point[0]
+	    		}
+			   	polygoncoords.push(latlong);
+			});
+			var centerpolygon = computeCenterOfPolygon(polygoncoords);
+			centroids.push(centerpolygon);
 
-			//console.log(geometry.coordinates)
-			for (var p = 0; p < geometry.coordinates.length; ++p) {
-				var polygon = geometry.coordinates[p];
-				var firstring = polygon[0];
-				var polygoncoords = []
-				firstring.forEach(function(point){
-					var latlong = {
-				   		lat: point[1],
-		        		lng: point[0]
-		    		}
-				   	polygoncoords.push(latlong);
-				});
-				var centerpolygon = computeCenterOfPolygon(polygoncoords);
-				centroids.push(centerpolygon);
-
-				coordinates.push(polygoncoords);
-			}
-
-			var centroidLat = centroids.reduce((a, o, i, p) => a + o.lat / p.length, 0);
-			var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
-			var centroid = {lat: centroidLat, lng: centroidLng};
-
-			console.log(coordinates);
-
-			if (coordinates.length > 0) createZone(code, level, ocean, parent, coordinates, centroid);
+			coordinates.push(polygoncoords);
 		}
+
+		var centroidLat = centroids.reduce((a, o, i, p) => a + o.lat / p.length, 0);
+		var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
+		var centroid = {lat: centroidLat, lng: centroidLng};
+
+		if (coordinates.length > 0) createZone(code, level, ocean, parent, coordinates, centroid);
 	}
 }
 
@@ -139,7 +131,7 @@ function insideZones(res, lat, lng) {
 }
 
 function nearZones(res, lat, lng) {
-	var maxDistance = 500;
+	var maxDistance = 6000;
 
 	ZoneModel.find({}, function (err, zones) {
 	    if (err) {
