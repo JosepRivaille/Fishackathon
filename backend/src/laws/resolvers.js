@@ -2,8 +2,9 @@ import LawModel from './model';
 
 const resolvers = {
     Query: {
-        laws: () => {
-            return LawModel.find({});
+        laws: (root, {affects}) => {
+            const filter = affects.length ? {affects: {$in: affects}} : {};
+            return LawModel.find(filter);
         },
         law: (root, {id}) => {
             return LawModel.find((law) => law.id === id);
@@ -11,13 +12,13 @@ const resolvers = {
     },
     Mutation: {
         addLaw: (root, params) => {
-            const { title, abstract, resource, affectations } = params;
+            const {title, abstract, resource, affects} = params;
             const law = new LawModel({
                 id: undefined,
                 title,
                 abstract,
                 resource,
-                affectations
+                affects
             });
             return law.save();
         }
