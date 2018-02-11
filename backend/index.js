@@ -35,9 +35,16 @@ app.use('/graphiql', graphiqlExpress({
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 
 app.get('/zones', (req, res) => {
-	//insertZones();
-	//var result = insidePolygon();
-	//res.send(result);
+	var lat = 2.13;
+	var lng = 41.3;
+
+	var zoneUtils = require('./src/zones/script_zones');
+
+	//zoneUtils.insertZones();
+	//zoneUtils.insidePolygon(lat, lng);
+
+	var result = zoneUtils.nearZones(lat, lng);
+	res.send(result);
 });
 
 
@@ -45,7 +52,7 @@ app.get('/zones', (req, res) => {
 import inside from 'point-in-polygon';
 import ZoneModel from './src/zones/model';
 
-function insidePolygon() {//lat, lng) {
+function insidePolygon(lat, lng) {
 	//var coordinates = [lat, lng];
 
 	var result = ZoneModel.findOne( { 'code': '21' } );
@@ -63,4 +70,3 @@ function insidePolygon() {//lat, lng) {
 
 	return result;
 }
-

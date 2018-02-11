@@ -1,4 +1,10 @@
-import ZoneModel from './src/zones/model';
+import ZoneModel from './model';
+
+module.exports = 
+{
+  insertZones: function () {insertZones()},
+  nearZones: function (lat, lng) {nearZones(lat, lng)}
+};
 
 function insertZones() {
 	var fs = require('fs');
@@ -9,7 +15,8 @@ function insertZones() {
 		var properties = features[i]["properties"];
 		var code = properties["F_CODE"];
 		var level = properties["F_LEVEL"];
-		var ocean = properties["OCEAN"];
+		var ocean = properties["OCEAN"].toUpperCase();
+		if (!["ATLANTIC", "INDIAN", "PACIFIC", "ARTIC"].includes(ocean)) ocean = "ATLANTIC";
 		var parent = "";
 		if (level === "SUBAREA") parent = properties["F_AREA"];
 		else if (level === "DIVISION") parent = properties["F_SUBAREA"];
@@ -36,9 +43,7 @@ function insertZones() {
 		});
 		var centroidLat = centroids.reduce((a, o, i, p) => a + o.lat / p.length, 0);
 		var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
-		var centroid = {lat: centroidLat, lng: centroidLng}
-		console.log(centroid);
-		console.log(centroids);
+		var centroid = {lat: centroidLat, lng: centroidLng};
 
 		createZone(code, level, ocean, parent, coordinates, centroid);
 	}
@@ -72,3 +77,47 @@ function computeCenterOfPolygon(polygon) {
 
 	return center;
 }
+
+
+
+function nearZones(lat, lng) {
+	var maxDistance = 1000;
+	var zones = ZoneModel.find({});
+	//var zones = ZoneModel.dataSize();
+	console.log(zones);
+
+	/*
+	var zones = ZoneModel.findOne( { 'code': '21' } );
+	var result = [];
+	zones.forEach(function(zone){
+		zone.polygon.forEach(function(polygon){
+			var distFromZone = getDistanceFromLatLonInKm(lat, lng, polygon.centroid.lat, polygon.centroid.lng);
+			if (distFromZone < maxDistance) {
+				result.push(zone);
+			}
+		})
+	})
+
+	return result;
+	*/
+	return zones;
+}
+
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
