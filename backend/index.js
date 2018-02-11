@@ -51,6 +51,7 @@ app.get('/myzones', (req, res) => {
 });
 
 app.get('/nearzones', (req, res) => {
+	console.log("ha entrat");
 	var lat = req.query.lat;
 	var lng = req.query.lng;
 	
