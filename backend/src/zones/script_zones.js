@@ -46,12 +46,12 @@ function insertZones() {
 		   	polygon.forEach(function(linearring){
 				var firstring = linearring[0];
 				var latlong = {
-			   		lat: firstring[0],
-	        		lng: firstring[1]
+			   		lat: firstring[1],
+	        		lng: firstring[0]
 	    		}
 			   	polygoncoords.push(latlong);
 			});
-			coordinates.push(polygoncoords);
+			if (polygoncoords.length > 1) coordinates.push(polygoncoords);
 
 			var centerpolygon = computeCenterOfPolygon(polygoncoords);
 			centroids.push(centerpolygon);
@@ -60,7 +60,7 @@ function insertZones() {
 		var centroidLng = centroids.reduce((a, o, i, p) => a + o.lng / p.length, 0);
 		var centroid = {lat: centroidLat, lng: centroidLng};
 
-		createZone(code, level, ocean, parent, coordinates, centroid);
+		if (coordinates.length > 0) createZone(code, level, ocean, parent, coordinates, centroid);
 	}
 }
 
@@ -121,13 +121,13 @@ function insideZones(res, lat, lng) {
 				}
 			})
 
-			res.send(zonesInside);
+			res.send(smallestZoneInside);
 	    }
   	});	
 }
 
 function nearZones(res, lat, lng) {
-	var maxDistance = 4000;
+	var maxDistance = 500;
 
 	ZoneModel.find({}, function (err, zones) {
 	    if (err) {
