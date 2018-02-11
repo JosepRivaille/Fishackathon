@@ -3,8 +3,7 @@ import LawModel from './model';
 const resolvers = {
     Query: {
         laws: (root, {affects}) => {
-            const filter = affects.length ? {affects: {$in: affects}} : {};
-            return LawModel.find(filter);
+            return LawModel.find({});
         },
         law: (root, {id}) => {
             return LawModel.find((law) => law.id === id);
