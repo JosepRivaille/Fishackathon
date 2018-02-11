@@ -148,7 +148,7 @@ function insideZones(res, lat, lng) {
 }
 
 function nearZones(res, lat, lng) {
-    var maxDistance = 1500;
+    var maxDistance = 2500;
 
     ZoneModel.find({
         $or: [
@@ -157,6 +157,8 @@ function nearZones(res, lat, lng) {
             {code: {$eq: "31.1.12"}},
             {code: {$eq: "27.9.b.2"}},
             {code: {$eq: "27.4.a"}},
+            {code: {$eq: "27.8.b"}},
+            {code: {$eq: "27.8.c"}}
         ]
     }, function (err, zones) {
         if (err) {
