@@ -17,8 +17,13 @@ const lawSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    affectations: {
-        type: [String]
+    affects : {
+        type: [String],
+        enum: [
+            'PROFESSIONAL',
+            'RECREATIONAL',
+            'DRAGGER'
+        ]
     }
 });
 

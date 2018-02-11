@@ -8,19 +8,25 @@ const typeDefs = `
         title: String
         abstract: String
         resource: String
-        affectations: [Affectation]
+        affects: [Classification]
     }
 
     type Query {
-        laws: [Law]
+        laws(affects: [Classification]): [Law]
         law(id: Int!): Law
     }
     
     type Mutation {
-        addLaw(title: String!, abstract: String, resource: String!, affectations: [Affectation]): Law
+        addLaw(
+            title: String!,
+            abstract: String,
+            resource: String!,
+            affects: [Classification],
+            bans: [Classification]
+        ): Law
     }
     
-    enum Affectation {
+    enum Classification {
         PROFESSIONAL
         RECREATIONAL
         DRAGGER
