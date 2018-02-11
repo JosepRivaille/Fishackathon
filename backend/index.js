@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import {graphqlExpress, graphiqlExpress} from 'apollo-server-express';
 
 import schema from './src';
+import {getFilteredZones} from './src/zones/script_zones';
 
 const app = express();
 const mongoURL = 'mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00-00-qtem3.mongodb.net:27017,' +
@@ -11,7 +12,7 @@ const mongoURL = 'mongodb://FrancescFisher:The_fisher64@thefisherpalace-shard-00
     '/test?ssl=true&replicaSet=TheFisherPalace-shard-0&authSource=admin';
 const portToListen = process.env.PORT || 3000;
 app.listen(portToListen, () => {
-    console.log('Listening on port '+portToListen);
+    console.log('Listening on port ' + portToListen);
 });
 
 // MiddleWares
@@ -34,9 +35,6 @@ app.use('/graphiql', graphiqlExpress({
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 
-
-import ZoneModel from './src/zones/model';
-
 app.get('/myzones', (req, res) => {
     var lat = req.query.lat;
     var lng = req.query.lng;
@@ -50,10 +48,13 @@ app.get('/myzones', (req, res) => {
 });
 
 app.get('/nearzones', (req, res) => {
-	console.log("ha entrat");
-	var lat = req.query.lat;
-	var lng = req.query.lng;
-	
-	var zoneUtils = require('./src/zones/script_zones');
-	zoneUtils.nearZones(res, lat, lng);
+    const {lat, lng, currentDay, shipSize, professional, kind} = req.query;
+
+    const coords = {lat, lng};
+    const today = new Date(currentDay);
+    const attributes = {
+        shipSize, professional, kind
+    };
+
+    getFilteredZones(res, coords, today, attributes);
 });

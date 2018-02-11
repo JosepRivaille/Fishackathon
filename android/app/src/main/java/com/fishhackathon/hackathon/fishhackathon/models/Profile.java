@@ -1,7 +1,6 @@
 package com.fishhackathon.hackathon.fishhackathon.models;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.fishhackathon.hackathon.fishhackathon.controllers.SharedPreferencesController;
 
@@ -16,8 +15,15 @@ public class Profile {
             "> 10m, < 12m",
             "> 12m"};
     public final static String[] TYPE_OF_SHIP = new String[]{
-            "Arrastre",
-            "Red Danesa"};
+            "PROFESSIONAL",
+            "RECREATIONAL",
+            "DRAGGER",
+            "FENCE",
+            "NET",
+            "FLY",
+            "TRAP",
+            "CORAL",
+            "HOOK"};
     private String sizeOfShip;
     private String typeOfShip;
     private boolean professionalShip;
