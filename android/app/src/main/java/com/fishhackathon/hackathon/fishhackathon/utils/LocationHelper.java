@@ -6,6 +6,17 @@ public class LocationHelper {
     private final static double WGS84_A = 6378137.0;                  // WGS 84 semi-major axis constant in meters
     private final static double WGS84_E2 = 0.00669437999014;          // square of WGS 84 eccentricity
 
+    public static String getLocationFormatted(Location locationA, Location locationB) {
+        String result;
+        float distance = locationA.distanceTo(locationB);
+        if (distance > 1000) {
+            result = (float) ((int) (distance / 100)) / 10 + "km";
+        } else {
+            result = distance + "m";
+        }
+        return result;
+    }
+
     public static float[] WSG84toECEF(Location location) {
         double radLat = Math.toRadians(location.getLatitude());
         double radLon = Math.toRadians(location.getLongitude());
