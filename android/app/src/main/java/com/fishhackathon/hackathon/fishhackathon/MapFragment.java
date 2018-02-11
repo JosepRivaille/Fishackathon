@@ -1,6 +1,5 @@
 package com.fishhackathon.hackathon.fishhackathon;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fishhackathon.hackathon.fishhackathon.controllers.APIController;
 import com.fishhackathon.hackathon.fishhackathon.controllers.VolleyController;
+import com.fishhackathon.hackathon.fishhackathon.views.CustomInfoWindow;
 import com.fishhackathon.hackathon.fishhackathon.models.MapGeoPoint;
 import com.fishhackathon.hackathon.fishhackathon.models.MapPolygon;
 import com.fishhackathon.hackathon.fishhackathon.models.Zone;
@@ -36,7 +36,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.TilesOverlay;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +101,7 @@ public class MapFragment extends Fragment {
     private void updateMapInformationPrivate(Location location, String fromDate, String toDate) {
         zones = new ArrayList<>();
 
-        String url = APIController.getURLForNearZones(location.getLatitude(), location.getLongitude());
+        String url = APIController.getURLForNearZones(location.getLatitude(), location.getLongitude(), fromDate, toDate);
         Log.e(TAG, "Location: " + location.getLatitude() + ", " + location.getLongitude()
                 + ", from: " + fromDate + ", to: " + toDate);
         Log.e(TAG, url);
@@ -143,6 +142,8 @@ public class MapFragment extends Fragment {
                         }
 
                         if (zones != null) {
+                            osmMap.getOverlays().clear();
+
                             for (int i = 0; i < zones.size(); ++i) {
                                 Zone currentZone = zones.get(i);
                                 if (currentZone.getCode().contains(".")) {
@@ -158,7 +159,7 @@ public class MapFragment extends Fragment {
                                     polygon.setFillColor(Color.parseColor("#9668e96e"));
                                     polygon.setStrokeColor(Color.GREEN);
                                     polygon.setStrokeWidth(10);
-                                    polygon.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, osmMap));
+                                    polygon.setInfoWindow(new CustomInfoWindow(getContext(), osmMap));
                                     List<GeoPoint> geoPoints = new ArrayList<>();
                                     for (int k = 0; k < currentMapPolygon.getPointsArrayList().size(); ++k) {
                                         MapGeoPoint mapGeoPoint = currentMapPolygon.getPointsArrayList().get(k);
@@ -168,6 +169,7 @@ public class MapFragment extends Fragment {
                                     osmMap.getOverlayManager().add(polygon);
                                 }
                             }
+                            addMarker(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                             osmMap.invalidate();
                         }
                     }
@@ -190,10 +192,11 @@ public class MapFragment extends Fragment {
     private void addMarker(GeoPoint geoPoint) {
         Marker marker = new Marker(osmMap);
         marker.setPosition(geoPoint);
-        //marker.setIcon(drawable);
+        marker.setIcon(getContext().getDrawable(R.drawable.map_marker));
         //marker.setImage(drawable);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle("Current Location");
-        marker.showInfoWindow();
+        //marker.showInfoWindow();
         osmMap.getOverlays().add(marker);
         osmMap.invalidate();
     }

@@ -47,14 +47,10 @@ app.get('/myzones', (req, res) => {
     zoneUtils.insideZones(res, lat, lng);
 });
 
+
+
 app.get('/nearzones', (req, res) => {
-    const {lat, lng, currentDay, shipSize, professional, kind} = req.query;
-
-    const coords = {lat, lng};
-    const today = new Date(currentDay);
-    const attributes = {
-        shipSize, professional, kind
-    };
-
-    nearZones(res, lat, lng);
+    const {lat, lng} = req.query;
+    const zoneUtils = require('./src/zones/script_zones');
+    zoneUtils.nearZones(res, lat, lng);
 });

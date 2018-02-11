@@ -1,4 +1,4 @@
-import { mergeSchemas } from 'graphql-tools';
+import {mergeSchemas} from 'graphql-tools';
 
 import laws from './laws/schema';
 import zones from './zones/schema';
