@@ -116,7 +116,7 @@ function insideZones(res, lat, lng) {
 }
 
 function nearZones(res, lat, lng) {
-	var maxDistance = 5000;
+	var maxDistance = 4000;
 
 	ZoneModel.find({}, function (err, zones) {
 	    if (err) {
@@ -126,9 +126,20 @@ function nearZones(res, lat, lng) {
   			var result = [];
 
 			zones.forEach(function(zone){
-				var distFromZone = getDistanceFromLatLonInKm(lat, lng, zone.centroid.lat, zone.centroid.lng);
-				if (distFromZone < maxDistance) {
-					result.push(zone);
+				var zoneIsNear = false;
+				var i = 0;
+				while (!zoneIsNear && i < zone.polygon.length) {
+					var j = 0;
+					while (!zoneIsNear && j < zone.polygon[i].length) {
+						var point = zone.polygon[i][j];
+						var distFromZone = getDistanceFromLatLonInKm(lat, lng, point.lat, point.lng);
+						if (distFromZone < maxDistance) {
+							zoneIsNear = true;
+							result.push(zone);
+						}
+						++j;
+					}
+					++i;
 				}
 			})
 			res.send(result);

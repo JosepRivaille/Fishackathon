@@ -47,6 +47,10 @@ public class MapFragment extends Fragment {
         super.onResume();
 
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
+
+        if (((MainActivity) getActivity()).existsLastLocation()) {
+            updateLatestLocation(((MainActivity) getActivity()).getLastLocation());
+        }
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
