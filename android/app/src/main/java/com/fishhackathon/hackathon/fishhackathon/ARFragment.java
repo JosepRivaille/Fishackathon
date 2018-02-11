@@ -40,6 +40,10 @@ public class ARFragment extends Fragment implements SensorEventListener {
     public void onResume() {
         super.onResume();
         registerSensors();
+
+        if (((MainActivity) getActivity()).existsLastLocation()) {
+            updateLatestLocation(((MainActivity) getActivity()).getLastLocation());
+        }
     }
 
     @Override
