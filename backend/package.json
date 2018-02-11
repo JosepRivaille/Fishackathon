@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel-watch index.js"
+    "build": "babel-watch index.js",
+    "start": "babel-watch index.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -25,8 +26,5 @@
     "shp": "0.0.1"
   },
   "author": "",
-  "license": "ISC",
-  "scripts": {
-    "start": "npm run build"
-  }
+  "license": "ISC"
 }
