@@ -29,6 +29,9 @@
         <activity
             android:name=".FilterActivity"
             android:parentActivityName=".MainActivity" />
-    </application>
 
+        <activity
+            android:name=".ZoneDetailActivity"
+            android:parentActivityName=".MainActivity" />
+    </application>
 </manifest>

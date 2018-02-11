@@ -2,7 +2,7 @@
     <string name="app_name">FishHackathon</string>
 
     <string name="title_map">Map</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_augmentedreality">Reality</string>
     <string name="title_profile">Profile</string>
     <string name="title_filter">Filters</string>
 

@@ -85,31 +85,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_especies"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_tipo_especies"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/profile_especies_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
-    </LinearLayout>
 </LinearLayout>
