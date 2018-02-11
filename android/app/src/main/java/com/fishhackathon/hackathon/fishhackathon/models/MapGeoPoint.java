@@ -1,6 +1,8 @@
 package com.fishhackathon.hackathon.fishhackathon.models;
 
-public class MapGeoPoint {
+import java.io.Serializable;
+
+public class MapGeoPoint implements Serializable {
     private double lat;
     private double lng;
 

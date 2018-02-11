@@ -1,16 +1,17 @@
 package com.fishhackathon.hackathon.fishhackathon.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Zone {
+public class Zone implements Serializable {
     private String id;
     private String code;
-    private String laws;
+    private ArrayList<Law> laws;
     private String level;
     private String ocean;
     private ArrayList<MapPolygon> polygonsArrayList;
 
-    public Zone(String id, String code, String laws, String level, String ocean, ArrayList<MapPolygon> polygonsArrayList) {
+    public Zone(String id, String code, ArrayList<Law> laws, String level, String ocean, ArrayList<MapPolygon> polygonsArrayList) {
         this.id = id;
         this.code = code;
         this.laws = laws;
@@ -31,7 +32,7 @@ public class Zone {
         return polygonsArrayList;
     }
 
-    public String getLaws() {
+    public ArrayList<Law> getLaws() {
         return laws;
     }
 

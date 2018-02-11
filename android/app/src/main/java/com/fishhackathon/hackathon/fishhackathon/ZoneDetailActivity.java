@@ -5,8 +5,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.fishhackathon.hackathon.fishhackathon.models.Zone;
+
+import java.io.Serializable;
+
 public class ZoneDetailActivity extends AppCompatActivity {
     private static final String TAG = ZoneDetailActivity.class.getSimpleName();
+    public static final String KEY_FOR_ZONE = "KEY_FOR_ZONES";
+    private Zone currentZone;
     private TextView codeTextView;
     private TextView levelTextView;
     private TextView oceanTextView;
@@ -18,6 +24,12 @@ public class ZoneDetailActivity extends AppCompatActivity {
 
         setUpElements();
         setUpListeners();
+
+        currentZone = (Zone) getIntent().getSerializableExtra(KEY_FOR_ZONE);
+
+        codeTextView.setText(currentZone.getCode());
+        levelTextView.setText(currentZone.getLevel());
+        oceanTextView.setText(currentZone.getOcean());
     }
 
     private void setUpElements() {

@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fishhackathon.hackathon.fishhackathon.controllers.APIController;
 import com.fishhackathon.hackathon.fishhackathon.controllers.VolleyController;
+import com.fishhackathon.hackathon.fishhackathon.models.Law;
 import com.fishhackathon.hackathon.fishhackathon.views.CustomInfoWindow;
 import com.fishhackathon.hackathon.fishhackathon.models.MapGeoPoint;
 import com.fishhackathon.hackathon.fishhackathon.models.MapPolygon;
@@ -116,7 +117,8 @@ public class MapFragment extends Fragment {
                                 JSONObject zoneJson = response.getJSONObject(i);
 
                                 String zoneId = zoneJson.getString("id");
-                                String laws = zoneJson.getString("laws");
+                                //ArrayList<Law> laws = zoneJson.getString("laws");
+                                ArrayList<Law> laws = new ArrayList<>();
                                 String code = zoneJson.getString("code");
                                 String level = zoneJson.getString("level");
                                 String ocean = zoneJson.getString("ocean");
@@ -159,7 +161,7 @@ public class MapFragment extends Fragment {
                                     polygon.setFillColor(Color.parseColor("#82e53935"));
                                     polygon.setStrokeColor(Color.RED);
                                     polygon.setStrokeWidth(10);
-                                    polygon.setInfoWindow(new CustomInfoWindow(getContext(), osmMap));
+                                    polygon.setInfoWindow(new CustomInfoWindow(getContext(), osmMap, currentZone));
                                     List<GeoPoint> geoPoints = new ArrayList<>();
                                     for (int k = 0; k < currentMapPolygon.getPointsArrayList().size(); ++k) {
                                         MapGeoPoint mapGeoPoint = currentMapPolygon.getPointsArrayList().get(k);
