@@ -2,7 +2,7 @@ import ZoneModel from './model';
 
 const resolvers = {
     Query: {
-        zones: () => {
+        zones: ({lat, lng}) => {
             return ZoneModel.find({});
         }
     },

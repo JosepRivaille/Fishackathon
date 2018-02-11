@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import uuid from 'node-uuid';
 
 const lawSchema = new mongoose.Schema({
@@ -17,8 +17,29 @@ const lawSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    affectations: {
-        type: [String]
+    affects : {
+        type: [String],
+        enum: [
+            'PROFESSIONAL',
+            'RECREATIONAL',
+            'DRAGGER',
+            'FENCE',
+            'NET',
+            'FLY',
+            'TRAP',
+            'CORAL',
+            'HOOK'
+        ]
+    },
+    timeWindow: {
+        type: new Schema({
+            start: Date,
+            end: Date,
+        })
+    },
+    affectsIn: {
+        type: Number,
+        default: 0
     }
 });
 

@@ -8,22 +8,47 @@ const typeDefs = `
         title: String
         abstract: String
         resource: String
-        affectations: [Affectation]
+        affects: [Classification]
+        time: TimeWindow
+        affectsIn: Int
+    }
+    
+    type TimeWindow {
+        start: String
+        end: String
+    }
+    
+    input TimeWindow2 {
+        start: String
+        end: String
     }
 
     type Query {
-        laws: [Law]
+        laws(affects: [Classification]): [Law]
         law(id: Int!): Law
     }
     
     type Mutation {
-        addLaw(title: String!, abstract: String, resource: String!, affectations: [Affectation]): Law
+        addLaw(
+            title: String!,
+            abstract: String,
+            resource: String!,
+            affects: [Classification],
+            timeWindow: TimeWindow2
+            affectsIn: Int
+        ): Law
     }
     
-    enum Affectation {
+    enum Classification {
         PROFESSIONAL
         RECREATIONAL
         DRAGGER
+        FENCE
+        NET
+        FLY
+        TRAP
+        CORAL
+        HOOK
     }
 `;
 
