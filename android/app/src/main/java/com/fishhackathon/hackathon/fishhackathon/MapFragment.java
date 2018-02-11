@@ -192,7 +192,9 @@ public class MapFragment extends Fragment {
     private void addMarker(GeoPoint geoPoint) {
         Marker marker = new Marker(osmMap);
         marker.setPosition(geoPoint);
-        marker.setIcon(getContext().getDrawable(R.drawable.map_marker));
+        if (getContext() != null) {
+            marker.setIcon(getContext().getDrawable(R.drawable.map_marker));
+        }
         //marker.setImage(drawable);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle("Current Location");

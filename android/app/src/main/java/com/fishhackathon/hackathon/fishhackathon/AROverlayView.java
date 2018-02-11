@@ -28,15 +28,21 @@ public class AROverlayView extends View {
 
         //TODO: Demo points
         arPoints = new ArrayList<ARPoint>() {{
-            add(new ARPoint("Playa Rio San Pedro", 36.529317, -6.216425, 0));
-            add(new ARPoint("Isla del Trocadero", 36.515823, -6.210870, 0));
+            add(new ARPoint("Puerto de Cadiz", 36.531180, -6.289465, 0));
+            add(new ARPoint("Puerto Sherry", 36.579965, -6.25421, 0));
+            add(new ARPoint("Puerto de Rota", 36.616306, -6.355033, 0));
+            add(new ARPoint("Puerto de Algeciras", 36.132013, -5.433128, 0));
+            add(new ARPoint("Puerto de Tanger", 35.790256, -5.793954, 0));
+            add(new ARPoint("Puerto de Málaga", 36.709644, -4.416859, 0));
+            add(new ARPoint("Puerto de Barcelona", 41.360342, 2.184479, 0));
+            add(new ARPoint("Puerto de A Coruña", 43.362586, -8.383828, 0));
         }};
 
         arLines = new ArrayList<ARLines>() {{
             add(new ARLines(
-                    new ARPoint("Cadiz", 36.528213, -6.291334, 0),
-                    new ARPoint("Rota", 36.623334, -6.361035, 0),
-                    true, true));
+                    new ARPoint("Puerto de Cadiz A", 36.542758, -6.279734, 0),
+                    new ARPoint("Puerto de Cadiz B", 36.540525, -6.276848, 0),
+                    true, false));
         }};
     }
 
